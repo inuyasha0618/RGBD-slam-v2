@@ -3,7 +3,8 @@
 
 #include "common_include.h"
 
-namespace {
+namespace myslam
+{
     class Camera {
     public:
         typedef std::shared_ptr<Camera> Ptr;
