@@ -10,13 +10,16 @@ namespace myslam
     Frame::~Frame() {}
 
     Frame::Ptr Frame::createFrame() {
+        cout << "xixi" << endl;
         static unsigned long id = 0;
         return Frame::Ptr(new Frame(id++));
     }
 
-    double Frame::findDepth(const cv::KeyPoint &kp) {
+    double Frame::findDepth(const cv::KeyPoint& kp) {
+
         int x = cvRound(kp.pt.x);
         int y = cvRound(kp.pt.y);
+
 
         ushort d = depth_.ptr<ushort>(y)[x];
 

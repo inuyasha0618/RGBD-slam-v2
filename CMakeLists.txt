@@ -29,9 +29,10 @@ include_directories(/home/slam/Sophus)
 
 set(THIRD_PARTY_LIBS
         ${OpenCV_LIBS}
-        ${Sophus_LIBS}
+        ${SOPHUS_LIBS}
         )
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src)
+ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/test)
 

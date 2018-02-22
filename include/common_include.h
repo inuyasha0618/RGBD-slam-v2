@@ -4,6 +4,7 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <sophus/se3.h>
+#include <sophus/so3.h>
 #include <opencv2/core/core.hpp>
 
 #include <vector>

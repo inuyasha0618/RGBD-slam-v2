@@ -2,11 +2,11 @@
 
 namespace myslam
 {
-    void Config::setParamFile(const string &filename) {
+    void Config::setParamFile(const string& filename) {
         if (config_ == nullptr) {
             config_ = shared_ptr<Config>(new Config());
         }
-        config_-> file_ = cv::FileStorage(filename, cv::FileStorage::READ);
+        config_-> file_ = cv::FileStorage(filename.c_str(), cv::FileStorage::READ);
         if (config_->file_.isOpened() == false) {
             cerr << "No config file found" << endl;
             config_->file_.release();

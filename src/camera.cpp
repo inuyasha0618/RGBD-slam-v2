@@ -1,8 +1,17 @@
 #include "camera.h"
+#include "config.h"
 
 namespace myslam
 {
     Camera::Camera() {
+        fx_ = Config::getParam<float>("camera.fx");
+        fy_ = Config::getParam<float>("camera.fy");
+        cx_ = Config::getParam<float>("camera.cx");
+        cy_ = Config::getParam<float>("camera.cy");
+
+        depth_sacle_ = Config::getParam<float>("camera.depth_scale");
+
+        cout << "Camera build" << endl;
     }
 
     Eigen::Vector3d Camera::world2camera(const Eigen::Vector3d &p_w, const Sophus::SE3 &T_c_w) {
