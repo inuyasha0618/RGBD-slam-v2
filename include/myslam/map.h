@@ -1,9 +1,9 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "common_include.h"
-#include "mappoint.h"
-#include "frame.h"
+#include "myslam/common_include.h"
+#include "myslam/mappoint.h"
+#include "myslam/frame.h"
 
 namespace myslam
 {

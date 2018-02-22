@@ -1,4 +1,4 @@
-#include "config.h"
+#include "myslam/config.h"
 
 namespace myslam
 {

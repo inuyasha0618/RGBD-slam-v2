@@ -2,8 +2,8 @@
 #define VISUAL_ODOMETRY_H
 
 
-#include "common_include.h"
-#include "map.h"
+#include "myslam/common_include.h"
+#include "myslam/map.h"
 
 #include <opencv2/features2d/features2d.hpp>
 

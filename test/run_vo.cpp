@@ -5,8 +5,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/viz.hpp>
 
-#include "config.h"
-#include "visual_odometry.h"
+#include "myslam/config.h"
+#include "myslam/visual_odometry.h"
 
 int main ( int argc, char** argv )
 {

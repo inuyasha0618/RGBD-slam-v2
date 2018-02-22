@@ -1,5 +1,5 @@
-#include "camera.h"
-#include "config.h"
+#include "myslam/camera.h"
+#include "myslam/config.h"
 
 namespace myslam
 {
@@ -11,7 +11,6 @@ namespace myslam
 
         depth_sacle_ = Config::getParam<float>("camera.depth_scale");
 
-        cout << "Camera build" << endl;
     }
 
     Eigen::Vector3d Camera::world2camera(const Eigen::Vector3d &p_w, const Sophus::SE3 &T_c_w) {

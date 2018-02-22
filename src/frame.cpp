@@ -1,5 +1,4 @@
-#include "frame.h"
-
+#include "myslam/frame.h"
 namespace myslam
 {
     Frame::Frame(): id_(-1), time_stamp_(-1), camera_(nullptr) {}
@@ -10,13 +9,11 @@ namespace myslam
     Frame::~Frame() {}
 
     Frame::Ptr Frame::createFrame() {
-        cout << "xixi" << endl;
         static unsigned long id = 0;
         return Frame::Ptr(new Frame(id++));
     }
 
     double Frame::findDepth(const cv::KeyPoint& kp) {
-
         int x = cvRound(kp.pt.x);
         int y = cvRound(kp.pt.y);
 

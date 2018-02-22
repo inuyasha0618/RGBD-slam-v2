@@ -1,8 +1,8 @@
 #ifndef FRAME_H
 #define FRAME_H
 
-#include "common_include.h"
-#include "camera.h"
+#include "myslam/common_include.h"
+#include "myslam/camera.h"
 
 namespace myslam
 {

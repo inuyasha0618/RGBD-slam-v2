@@ -3,8 +3,8 @@
 
 #include <boost/timer.hpp>
 
-#include "config.h"
-#include "visual_odometry.h"
+#include "myslam/config.h"
+#include "myslam/visual_odometry.h"
 
 namespace myslam
 {
@@ -35,11 +35,6 @@ namespace myslam
                 extractKeyPoints();
                 computeDescriptors();
                 setRef3DPoints();
-
-                cv::Mat output_img;
-                cv::drawKeypoints(curr_->color_, keypoints_curr_, output_img);
-                cv::imshow("第一张图的特征点", output_img);
-                cv::waitKey(0);
                 break;
             }
             case OK:
