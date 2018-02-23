@@ -2,9 +2,11 @@
 #include <opencv2/calib3d/calib3d.hpp>
 
 #include <boost/timer.hpp>
+#include <g2o/core/block_solver.h>
 
 #include "myslam/config.h"
 #include "myslam/visual_odometry.h"
+#include "myslam/g2o_types.h"
 
 namespace myslam
 {
@@ -125,12 +127,61 @@ namespace myslam
                 Sophus::SO3(rvec.at<double>(0, 0), rvec.at<double>(1, 0), rvec.at<double>(2, 0)),
                 Eigen::Vector3d(tvec.at<double>(0, 0), tvec.at<double>(1, 0), tvec.at<double>(2, 0))
         );
+
+        //　定义块求解器类型
+        typedef g2o::BlockSolver<g2o::BlockSolverTraits<6,2>> Block;
+        // 选择块求解器所使用的求解方式，稠密还是稀疏
+        Block::LinearSolverType* linearSolver = new g2o::LinearSolverDense<Block::PoseMatrixType>();
+        // 实例化一个块求解器指针
+        Block* blockSolverPtr = new Block(linearSolver);
+
+        //　设置所用优化算法
+        g2o::OptimizationAlgorithmLevenberg* optiAlgorithm = new g2o::OptimizationAlgorithmLevenberg(blockSolverPtr);
+
+        //　创建优化问题
+        g2o::SparseOptimizer optimizer;
+
+        //　给优化问题设置上刚刚选好的优化算法
+        optimizer.setAlgorithm(optiAlgorithm);
+
+        // 下面就是给优化问题添加顶点和边
+
+        // 创建顶点,　该问题就一个顶点，即相机的相对参考帧的位姿
+        g2o::VertexSE3Expmap* pose = new g2o::VertexSE3Expmap();
+        pose->setId(0);
+        // 设置优化初始值
+        pose->setEstimate(g2o::SE3Quat(T_c_r_esti_.rotation_matrix(), T_c_r_esti_.translation()));
+
+        // 将该点加入优化问题中
+        optimizer.addVertex(pose);
+
+        // 添加边
+        for (int i = 0; i < inliers.rows; i++) {
+            // 创建边
+            EdgeProjXYZ2UVPoseOnly* edge = new EdgeProjXYZ2UVPoseOnly();
+            edge->setId(i);
+            edge->setVertex(0, pose);
+
+            int index = inliers.at<int>(i, 0);
+
+            edge->setMeasurement(Eigen::Vector2d(pts2d[index].x, pts2d[index].y));
+            edge->camera_ = curr_->camera_.get();
+            edge->point_ = Eigen::Vector3d(pts3d[index].x, pts3d[index].y, pts3d[index].z);
+            edge->setInformation(Eigen::Matrix2d::Identity());
+
+            optimizer.addEdge(edge);
+        }
+
+        //　开始优化
+        optimizer.initializeOptimization();
+        optimizer.optimize(10);
+
+        T_c_r_esti_ = Sophus::SE3(pose->estimate().rotation(), pose->estimate().translation());
     }
 
     void VisualOdometry::setRef3DPoints() {
         pts_3d_ref_.clear();
         descriptors_ref_ = cv::Mat();
-        cout << "keypoints_curr_.size(): " << keypoints_curr_.size() << endl;
 
         for (size_t i = 0; i < keypoints_curr_.size(); i++) {
             //　查询深度
